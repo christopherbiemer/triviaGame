@@ -1,0 +1,60 @@
+
+body {
+	background-image: url("Images/pollock.jpg");
+}
+
+.jumbotron{
+	background-image: url("Images/subtle_white_feathers.png");
+	color: black;
+	margin: 0px 120px 0px 120px;
+	font-family: Concert One;
+	border: 10px solid black;
+	height: 580px;
+}
+
+#timer {
+	text-align: center;
+}
+
+h1 {
+	font-family: Bungee Shade;
+	margin-bottom: 15px;
+}
+
+h2 {
+	padding: 5px 10px 5px 10px;
+}
+
+button {
+	color: black;
+	width: 33%;
+	margin-top: 20px;
+}
+
+img {
+	height: 200px;
+	width: 200px;
+}
+
+p {
+	font-size: 15px;
+}
+
+#question {
+	margin-top: 10px;
+	text-align: center;
+}
+
+#start {
+	text-align: center;
+	margin-top: 50px;
+}
+
+#answers {
+	text-align: center;
+	margin: 15px;
+}
+
+#image {
+	text-align: center;
+}

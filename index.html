@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Trivia Game</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link href="https://fonts.googleapis.com/css?family=Bungee+Shade|Concert+One" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="Assets/style.css">
+</head>
+<body>
+
+<div class="jumbotron window">
+<h1 class="text-center">Modern Art Movements Trivia Game</h1>
+<h2 class="text-center"></h2>
+
+<div id="timer"></div>
+
+<div id="question"></div>
+
+<div id="answers"></div>
+
+<div id="image"></div>
+
+<div id="start"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script>
+
+var correct = 0;
+var incorrect = 0;
+var unanswered = 8;
+
+var ten = 10;
+var five = 5;
+
+function timer() {
+	    ten--;
+	    $("#timer").text(ten);
+	    if(ten <= 0) {
+	        ten = 30;
+	        timer();
+	    }
+	};
+
+var questions = ["Which music composer invented Atonalism?", "Who founded the Surrealist movement in Paris, France?", "Impressionist art takes into account the artist's..?", "Edvard Munch's famous painting, the Scream, is from what artistic period?", "Les Demoiselles d'Avignon is a Picasso work that draws artistic influence from which continent?", "Photographic cubism was an experimental art style developed by whom?", "Which NYC artist gained initial recognition through the street art duo SAMO?", "Naturalist art focused on the..?"];
+var answers = [["Anton Bruckner", "Joseph Haydn", "Wolfgang Mozart", "Arnold Schoenberg"], ["Salvador Dali", "André Breton", "Joan Miro", "René Magritte"], ["Reality", "Mythology", "Perception", "Insanity"], ["Cubism", "Expressionism", "Naturalism", "Impressionism"], ["South America", "Australia", "Asia", "Africa"], ["David Hockney", "Andy Warhol", "Jackson Pollock", "Frida Kahlo"], ["Keith Haring", "Richard Prince", "Jean-Michel Basquiat", "Willem de Kooning"], ["Natural Order of Things", "Most Real Depiction of a Subject", "Danger of Nature", "Mundanity of Life"]];
+var correctanswers = ["Arnold Schoenberg", "André Breton", "Perception", "Expressionism", "Africa", "David Hockney", "Jean-Michel Basquiat", "Danger of Nature"];
+var images = ["Assets/Images/schoenberg.jpg", "Assets/Images/breton.jpg", "Assets/Images/haystacks.jpg", "Assets/Images/scream.jpg", "Assets/Images/avignon.jpg", "Assets/Images/hockney.jpg", "Assets/Images/basquiat.jpg", "Assets/Images/naturalism.jpg"];
+var yes = ["Nice One!", "Superb", "Cooool", "Congratulations, You're Awesome!", "WOW!!!"];
+var no = ["WRONG!", ":((((((", "Losahhh", "Read It and Weep", "You Suck :)", "Get It Right.."];
+
+
+
+$("#start").html("<button>Start Game</button");
+
+function choices(x) {
+	for (var j = 0; j<4; j++) {
+		$("#answers").append("<div>");
+		var a = $("<button>");
+		a.addClass("answer" + j);
+		a.attr("data-name", answers[x][j]);
+		a.text(answers[x][j]);
+		$("#answers").append(a);
+		$("#answers").append("<div>");
+	}
+}
+
+var i = -1;
+
+function resultsConsole() {
+		$("#image").html("<p>")
+		$("#question").html("<h3>Here's How You Did</h3>");
+		$("#timer").html("<h3>");
+		$("#answers").html("<p>Correct Answers: " + correct + " </p>");
+		$("#answers").append("<p>Incorrect Answers: " + incorrect + " </p>");
+		$("#answers").append("<p>Unanswered Questions: " + unanswered + " </p>");
+		$("#start").html("<button>Start Over</button");
+		i = -1;
+		correct = 0;
+		incorrect = 0;
+		unanswered = 8;
+}
+
+function chooser() {
+	setInterval(timer, 1000);
+	i++;
+	if (unanswered>0) {
+		$("#answers").html("<div>");
+		$("#image").html("<div>");
+		$("#question").html("<h3> " + questions[i] + " </h3>");
+		choices(i);	
+		$(document).on("click", ".answer0", function() {
+			var guess = $(".answer0").attr("data-name");
+			console.log("Guess: " + guess);
+			console.log("Correct: " + correctanswers[i]);
+			unanswered--;
+			if(guess == correctanswers[i]) {
+				console.log(i);
+				correct++;
+				$("#answers").html("<h3> " + yes[Math.floor(Math.random() * yes.length)] + " </h3>");
+				$("#image").html("<img src='" + images[i] + "'>");
+				chooser();
+			}
+			
+			else {
+				console.log(i);
+				incorrect++;
+				$("#question").html("<h3> " + correctanswers[i] + " </h3>");
+				$("#answers").html("<h3> " + no[Math.floor(Math.random() * no.length)] + " </h3>");
+				$("#image").html("<img src='" + images[i] + "'>");
+				chooser();
+			}
+			
+		})
+		$(document).on("click", ".answer1", function() {
+			var guess = $(".answer1").attr("data-name");
+			console.log("Guess: " + guess);
+			console.log("Correct: " + correctanswers[i]);
+			unanswered--;
+			if(guess == correctanswers[i]) {
+				console.log(i);
+				correct++;
+				$("#answers").html("<h3> " + yes[Math.floor(Math.random() * yes.length)] + " </h3>");
+				$("#image").html("<img src='" + images[i] + "'>");
+				chooser();
+			}
+			
+			else {
+				console.log(i);
+				incorrect++;
+				$("#question").html("<h3> " + correctanswers[i] + " </h3>");
+				$("#answers").html("<h3> " + no[Math.floor(Math.random() * no.length)] + " </h3>");
+				$("#image").html("<img src='" + images[i] + "'>");
+				chooser();
+			}
+			
+		})
+		$(document).on("click", ".answer2", function() {
+			var guess = $(".answer2").attr("data-name");
+			console.log("Guess: " + guess);
+			console.log("Correct: " + correctanswers[i]);
+			unanswered--;
+			if(guess == correctanswers[i]) {
+				console.log(i);
+				correct++;
+				$("#answers").html("<h3> " + yes[Math.floor(Math.random() * yes.length)] + " </h3>");
+				$("#image").html("<img src='" + images[i] + "'>");
+				chooser();
+			}
+			
+			else {
+				console.log(i);
+				incorrect++;
+				$("#question").html("<h3> " + correctanswers[i] + " </h3>");
+				$("#answers").html("<h3> " + no[Math.floor(Math.random() * no.length)] + " </h3>");
+				$("#image").html("<img src='" + images[i] + "'>");
+				chooser();
+			}
+			
+		})
+		$(document).on("click", ".answer3", function() {
+			var guess = $(".answer3").attr("data-name");
+			console.log("Guess: " + guess);
+			console.log("Correct: " + correctanswers[i]);
+			unanswered--;
+			if(guess == correctanswers[i]) {
+				console.log(i);
+				correct++;
+				$("#answers").html("<h3> " + yes[Math.floor(Math.random() * yes.length)] + " </h3>");
+				$("#image").html("<img src='" + images[i] + "'>");
+				chooser();
+			}
+
+			
+			else {
+				console.log(i);
+				incorrect++;
+				$("#question").html("<h3> " + correctanswers[i] + " </h3>");
+				$("#answers").html("<h3> " + no[Math.floor(Math.random() * no.length)] + " </h3>");
+				$("#image").html("<img src='" + images[i] + "'>");
+				chooser();
+			}
+			
+		})
+
+
+	}
+	else {
+		resultsConsole();
+	}
+}
+
+
+function triviaGame() {
+	$("#start").html("<h3>");
+	chooser();
+}
+    
+
+$("#start").on("click", triviaGame);
+
+</script>
+
+</div>
+
+</body>
+</html>
