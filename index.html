@@ -26,178 +26,309 @@
 
 <script>
 
+//setting the initial score values
 var correct = 0;
 var incorrect = 0;
 var unanswered = 8;
 
-var ten = 10;
-var five = 5;
+//setting the question/answer/image index
+var i = -1;
 
-function timer() {
-	    ten--;
-	    $("#timer").text(ten);
-	    if(ten <= 0) {
-	        ten = 30;
-	        timer();
-	    }
-	};
-
+//creating an array of the questions
 var questions = ["Which music composer invented Atonalism?", "Who founded the Surrealist movement in Paris, France?", "Impressionist art takes into account the artist's..?", "Edvard Munch's famous painting, the Scream, is from what artistic period?", "Les Demoiselles d'Avignon is a Picasso work that draws artistic influence from which continent?", "Photographic cubism was an experimental art style developed by whom?", "Which NYC artist gained initial recognition through the street art duo SAMO?", "Naturalist art focused on the..?"];
+
+//creating a 2d array of the answers
 var answers = [["Anton Bruckner", "Joseph Haydn", "Wolfgang Mozart", "Arnold Schoenberg"], ["Salvador Dali", "André Breton", "Joan Miro", "René Magritte"], ["Reality", "Mythology", "Perception", "Insanity"], ["Cubism", "Expressionism", "Naturalism", "Impressionism"], ["South America", "Australia", "Asia", "Africa"], ["David Hockney", "Andy Warhol", "Jackson Pollock", "Frida Kahlo"], ["Keith Haring", "Richard Prince", "Jean-Michel Basquiat", "Willem de Kooning"], ["Natural Order of Things", "Most Real Depiction of a Subject", "Danger of Nature", "Mundanity of Life"]];
+
+//creating an array of only the correct answers
 var correctanswers = ["Arnold Schoenberg", "André Breton", "Perception", "Expressionism", "Africa", "David Hockney", "Jean-Michel Basquiat", "Danger of Nature"];
+
+//creating an array of the image URLS correspondent to each question index
 var images = ["Assets/Images/schoenberg.jpg", "Assets/Images/breton.jpg", "Assets/Images/haystacks.jpg", "Assets/Images/scream.jpg", "Assets/Images/avignon.jpg", "Assets/Images/hockney.jpg", "Assets/Images/basquiat.jpg", "Assets/Images/naturalism.jpg"];
+
+//creating an array of positive encouragement
 var yes = ["Nice One!", "Superb", "Cooool", "Congratulations, You're Awesome!", "WOW!!!"];
+
+//creating an array of berating statements
 var no = ["WRONG!", ":((((((", "Losahhh", "Read It and Weep", "You Suck :)", "Get It Right.."];
 
 
-
+//displaying the initial start button
 $("#start").html("<button>Start Game</button");
 
+//function that displays the answer buttons
 function choices(x) {
+	//loop to go through the four answer possibilities
 	for (var j = 0; j<4; j++) {
+		//display a div so that each button is displayed on a separate line
 		$("#answers").append("<div>");
+		//assign a button tag to a variable
 		var a = $("<button>");
+		//add a unique class to EACH button
 		a.addClass("answer" + j);
+		//assign a data-name to each button
 		a.attr("data-name", answers[x][j]);
+		//assign text to each button
 		a.text(answers[x][j]);
+		//display the buttons
 		$("#answers").append(a);
+		//create another div for separation between buttons
 		$("#answers").append("<div>");
 	}
 }
 
-var i = -1;
-
 function resultsConsole() {
+		//clear out the image div
 		$("#image").html("<p>")
+		//replace question with results header
 		$("#question").html("<h3>Here's How You Did</h3>");
+		//clear out the timer div
 		$("#timer").html("<h3>");
+		//display the number of correct answers
 		$("#answers").html("<p>Correct Answers: " + correct + " </p>");
+		//display the number of incorrect answers
 		$("#answers").append("<p>Incorrect Answers: " + incorrect + " </p>");
+		//display the number of timed out questions
 		$("#answers").append("<p>Unanswered Questions: " + unanswered + " </p>");
+		//display a Start Over button that restarts the game
 		$("#start").html("<button>Start Over</button");
+		//set the question index back to -1
 		i = -1;
+		//set the score values back to their original numbers
 		correct = 0;
 		incorrect = 0;
 		unanswered = 8;
 }
 
 function chooser() {
-	setInterval(timer, 1000);
+	//setting the question timer
+	var questionCountdown = 7;
+	//increase counter by 1
 	i++;
-	if (unanswered>0) {
+	//if the question index is less than 8 (i.e. only 0 through 7 count)
+	if (i<8) {
+		//initialize timer to avoid 1 second delay
+		$("#timer").text(questionCountdown);
+		//set timer to a variable so that I can clear it
+		var timeAlotted = setInterval(function() {
+			//decrease countdown by one
+			questionCountdown--;
+			//display new time
+		    $("#timer").text(questionCountdown);
+		    //when timer gets to 0
+		    if (questionCountdown == 0) {
+		    	//reset timer value
+		    	questionCountdown = 7;
+		    	//display the correct answer
+		    	$("#question").html("<h3> " + correctanswers[i] + " </h3>");
+		    	//berate the player
+		    	$("#answers").html("<h3> " + no[Math.floor(Math.random() * no.length)] + " </h3>");
+		    	//show the image
+				$("#image").html("<img src='" + images[i] + "'>");
+				//clear the interval
+				clearInterval(timeAlotted);
+				//wait three seconds to rerun the function
+				setTimeout(chooser, 3000);
+		    }
+		    else if (questionCountdown == -1) {
+		    	//reset timer value
+		    	questionCountdown = 7;
+		    	//display the correct answer
+		    	$("#question").html("<h3> " + correctanswers[i] + " </h3>");
+		    	//berate the player
+		    	$("#answers").html("<h3> " + yes[Math.floor(Math.random() * yes.length)] + " </h3>");
+		    	//show the image
+				$("#image").html("<img src='" + images[i] + "'>");
+				//clear the interval
+				clearInterval(timeAlotted);
+				//wait three seconds to rerun the function
+				setTimeout(chooser, 3000);
+		    }
+			},1000);
+
+		//clear out answer div
 		$("#answers").html("<div>");
+		//clear out the image div
 		$("#image").html("<div>");
+		//display the question
 		$("#question").html("<h3> " + questions[i] + " </h3>");
+		//display the answer buttons
 		choices(i);	
-		$(document).on("click", ".answer0", function() {
-			var guess = $(".answer0").attr("data-name");
-			console.log("Guess: " + guess);
-			console.log("Correct: " + correctanswers[i]);
-			unanswered--;
-			if(guess == correctanswers[i]) {
-				console.log(i);
-				correct++;
-				$("#answers").html("<h3> " + yes[Math.floor(Math.random() * yes.length)] + " </h3>");
-				$("#image").html("<img src='" + images[i] + "'>");
-				chooser();
-			}
-			
-			else {
-				console.log(i);
-				incorrect++;
-				$("#question").html("<h3> " + correctanswers[i] + " </h3>");
-				$("#answers").html("<h3> " + no[Math.floor(Math.random() * no.length)] + " </h3>");
-				$("#image").html("<img src='" + images[i] + "'>");
-				chooser();
-			}
-			
-		})
-		$(document).on("click", ".answer1", function() {
-			var guess = $(".answer1").attr("data-name");
-			console.log("Guess: " + guess);
-			console.log("Correct: " + correctanswers[i]);
-			unanswered--;
-			if(guess == correctanswers[i]) {
-				console.log(i);
-				correct++;
-				$("#answers").html("<h3> " + yes[Math.floor(Math.random() * yes.length)] + " </h3>");
-				$("#image").html("<img src='" + images[i] + "'>");
-				chooser();
-			}
-			
-			else {
-				console.log(i);
-				incorrect++;
-				$("#question").html("<h3> " + correctanswers[i] + " </h3>");
-				$("#answers").html("<h3> " + no[Math.floor(Math.random() * no.length)] + " </h3>");
-				$("#image").html("<img src='" + images[i] + "'>");
-				chooser();
-			}
-			
-		})
-		$(document).on("click", ".answer2", function() {
-			var guess = $(".answer2").attr("data-name");
-			console.log("Guess: " + guess);
-			console.log("Correct: " + correctanswers[i]);
-			unanswered--;
-			if(guess == correctanswers[i]) {
-				console.log(i);
-				correct++;
-				$("#answers").html("<h3> " + yes[Math.floor(Math.random() * yes.length)] + " </h3>");
-				$("#image").html("<img src='" + images[i] + "'>");
-				chooser();
-			}
-			
-			else {
-				console.log(i);
-				incorrect++;
-				$("#question").html("<h3> " + correctanswers[i] + " </h3>");
-				$("#answers").html("<h3> " + no[Math.floor(Math.random() * no.length)] + " </h3>");
-				$("#image").html("<img src='" + images[i] + "'>");
-				chooser();
-			}
-			
-		})
-		$(document).on("click", ".answer3", function() {
-			var guess = $(".answer3").attr("data-name");
-			console.log("Guess: " + guess);
-			console.log("Correct: " + correctanswers[i]);
-			unanswered--;
-			if(guess == correctanswers[i]) {
-				console.log(i);
-				correct++;
-				$("#answers").html("<h3> " + yes[Math.floor(Math.random() * yes.length)] + " </h3>");
-				$("#image").html("<img src='" + images[i] + "'>");
-				chooser();
-			}
-
-			
-			else {
-				console.log(i);
-				incorrect++;
-				$("#question").html("<h3> " + correctanswers[i] + " </h3>");
-				$("#answers").html("<h3> " + no[Math.floor(Math.random() * no.length)] + " </h3>");
-				$("#image").html("<img src='" + images[i] + "'>");
-				chooser();
-			}
-			
-		})
-
 
 	}
 	else {
+		//run the results console when index hits 8
 		resultsConsole();
 	}
 }
 
 
+//game function
 function triviaGame() {
+	//clear out the start button
 	$("#start").html("<h3>");
+	//run the chooser function
 	chooser();
 }
     
-
+//when user clicks on the start button, run the trivia game
 $("#start").on("click", triviaGame);
+
+//when user clicks on first button
+$(document).on("click", ".answer0", function() {
+	//set user guess equal to the answer correspondent with the button the user clicked
+	var guess = $(".answer0").attr("data-name");
+	//decrease unanswered questions by 1
+	unanswered--;
+	//if the quess is right
+	if(guess == correctanswers[i]) {
+		//increase the correct answers score by 1
+		correct++;
+		//replace the question with the correct answer
+		$("#question").html("<h3> " + correctanswers[i] + " </h3>");
+		//congratulate the user with a random encouraging statement
+		$("#answers").html("<h3> " + yes[Math.floor(Math.random() * yes.length)] + " </h3>");
+		//display an image associated with the answer
+		$("#image").html("<img src='" + images[i] + "'>");
+		//clear out the timer
+		questionCountdown == -1;
+		//wait three seconds and then run the game again
+		setTimeout(chooser, 3000);
+	}
+	
+	else {
+		//increase the incorrect answers score by 1
+		incorrect++;
+		//replace the question with the correct answer
+		$("#question").html("<h3> " + correctanswers[i] + " </h3>");
+		//berate the user with a random negative statement
+		$("#answers").html("<h3> " + no[Math.floor(Math.random() * no.length)] + " </h3>");
+		//display an image associated with the answer
+		$("#image").html("<img src='" + images[i] + "'>");
+		//clear out the timer
+		questionCountdown == 0;
+		//wait three seconds and then run the game again
+		setTimeout(chooser, 3000);
+	}
+	
+})
+
+//when user clicks on second button
+$(document).on("click", ".answer1", function() {
+	//set user guess equal to the answer correspondent with the button the user clicked
+	var guess = $(".answer1").attr("data-name");
+	//decrease unanswered questions by 1
+	unanswered--;
+	//if the quess is right
+	if(guess == correctanswers[i]) {
+		//increase the correct answers score by 1
+		correct++;
+		//replace the question with the correct answer
+		$("#question").html("<h3> " + correctanswers[i] + " </h3>");
+		//congratulate the user with a random encouraging statement
+		$("#answers").html("<h3> " + yes[Math.floor(Math.random() * yes.length)] + " </h3>");
+		//display an image associated with the answer
+		$("#image").html("<img src='" + images[i] + "'>");
+		//clear out the timer
+		questionCountdown == -1;
+		//wait three seconds and then run the game again
+		setTimeout(chooser, 3000);
+	}
+	//if the guess is wrong
+	else {
+		//increase the incorrect answers score by 1
+		incorrect++;
+		//replace the question with the correct answer
+		$("#question").html("<h3> " + correctanswers[i] + " </h3>");
+		//berate the user with a random negative statement
+		$("#answers").html("<h3> " + no[Math.floor(Math.random() * no.length)] + " </h3>");
+		//display an image associated with the answer
+		$("#image").html("<img src='" + images[i] + "'>");
+		//clear out the timer
+		questionCountdown == 0;
+		//wait three seconds and then run the game again
+		setTimeout(chooser, 3000);
+	}
+	
+})
+
+//when user clicks on third button
+$(document).on("click", ".answer2", function() {
+	//set user guess equal to the answer correspondent with the button the user clicked
+	var guess = $(".answer2").attr("data-name");
+	//decrease unanswered questions by 1
+	unanswered--;
+	//if the quess is right
+	if(guess == correctanswers[i]) {
+		//increase the correct answers score by 1
+		correct++;
+		//replace the question with the correct answer
+		$("#question").html("<h3> " + correctanswers[i] + " </h3>");
+		//congratulate the user with a random encouraging statement
+		$("#answers").html("<h3> " + yes[Math.floor(Math.random() * yes.length)] + " </h3>");
+		//display an image associated with the answer
+		$("#image").html("<img src='" + images[i] + "'>");
+		//clear out the timer
+		questionCountdown == -1;
+		//wait three seconds and then run the game again
+		setTimeout(chooser, 3000);
+	}
+	//if the guess is wrong
+	else {
+		//increase the incorrect answers score by 1
+		incorrect++;
+		//replace the question with the correct answer
+		$("#question").html("<h3> " + correctanswers[i] + " </h3>");
+		//berate the user with a random negative statement
+		$("#answers").html("<h3> " + no[Math.floor(Math.random() * no.length)] + " </h3>");
+		//display an image associated with the answer
+		$("#image").html("<img src='" + images[i] + "'>");
+		//clear out the timer
+		questionCountdown == 0;
+		//wait three seconds and then run the game again
+		setTimeout(chooser, 3000);
+	}
+	
+})
+
+//when user clicks on fourth button
+$(document).on("click", ".answer3", function() {
+	//set user guess equal to the answer correspondent with the button the user clicked
+	var guess = $(".answer3").attr("data-name");
+	//decrease unanswered questions by 1
+	unanswered--;
+	//if the quess is right
+	if(guess == correctanswers[i]) {
+		//increase the correct answers score by 1
+		correct++;
+		//replace the question with the correct answer
+		$("#question").html("<h3> " + correctanswers[i] + " </h3>");
+		//congratulate the user with a random encouraging statement
+		$("#answers").html("<h3> " + yes[Math.floor(Math.random() * yes.length)] + " </h3>");
+		//display an image associated with the answer
+		$("#image").html("<img src='" + images[i] + "'>");
+		//clear out the timer
+		questionCountdown == -1;
+		//wait three seconds and then run the game again
+		setTimeout(chooser, 3000);
+	}
+	//if the guess is wrong
+	else {
+		//increase the incorrect answers score by 1
+		incorrect++;
+		//replace the question with the correct answer
+		$("#question").html("<h3> " + correctanswers[i] + " </h3>");
+		//berate the user with a random negative statement
+		$("#answers").html("<h3> " + no[Math.floor(Math.random() * no.length)] + " </h3>");
+		//display an image associated with the answer
+		$("#image").html("<img src='" + images[i] + "'>");
+		//clear out the timer
+		questionCountdown == 0;
+		//wait three seconds and then run the game again
+		setTimeout(chooser, 3000);
+	}
+	
+})
 
 </script>
 
