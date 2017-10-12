@@ -34,6 +34,9 @@ var unanswered = 8;
 //setting the question/answer/image index
 var i = -1;
 
+//initialize global timeAlotted variable
+var timeAlotted;
+
 //creating an array of the questions
 var questions = ["Which music composer invented Atonalism?", "Who founded the Surrealist movement in Paris, France?", "Impressionist art takes into account the artist's..?", "Edvard Munch's famous painting, the Scream, is from what artistic period?", "Les Demoiselles d'Avignon is a Picasso work that draws artistic influence from which continent?", "Photographic cubism was an experimental art style developed by whom?", "Which NYC artist gained initial recognition through the street art duo SAMO?", "Naturalist art focused on the..?"];
 
@@ -110,7 +113,7 @@ function chooser() {
 		//initialize timer to avoid 1 second delay
 		$("#timer").text(questionCountdown);
 		//set timer to a variable so that I can clear it
-		var timeAlotted = setInterval(function() {
+		timeAlotted = setInterval(function() {
 			//decrease countdown by one
 			questionCountdown--;
 			//display new time
@@ -123,20 +126,6 @@ function chooser() {
 		    	$("#question").html("<h3> " + correctanswers[i] + " </h3>");
 		    	//berate the player
 		    	$("#answers").html("<h3> " + no[Math.floor(Math.random() * no.length)] + " </h3>");
-		    	//show the image
-				$("#image").html("<img src='" + images[i] + "'>");
-				//clear the interval
-				clearInterval(timeAlotted);
-				//wait three seconds to rerun the function
-				setTimeout(chooser, 3000);
-		    }
-		    else if (questionCountdown == -1) {
-		    	//reset timer value
-		    	questionCountdown = 7;
-		    	//display the correct answer
-		    	$("#question").html("<h3> " + correctanswers[i] + " </h3>");
-		    	//berate the player
-		    	$("#answers").html("<h3> " + yes[Math.floor(Math.random() * yes.length)] + " </h3>");
 		    	//show the image
 				$("#image").html("<img src='" + images[i] + "'>");
 				//clear the interval
@@ -191,7 +180,7 @@ $(document).on("click", ".answer0", function() {
 		//display an image associated with the answer
 		$("#image").html("<img src='" + images[i] + "'>");
 		//clear out the timer
-		questionCountdown == -1;
+		clearInterval(timeAlotted);
 		//wait three seconds and then run the game again
 		setTimeout(chooser, 3000);
 	}
@@ -206,7 +195,7 @@ $(document).on("click", ".answer0", function() {
 		//display an image associated with the answer
 		$("#image").html("<img src='" + images[i] + "'>");
 		//clear out the timer
-		questionCountdown == 0;
+		clearInterval(timeAlotted);
 		//wait three seconds and then run the game again
 		setTimeout(chooser, 3000);
 	}
@@ -230,7 +219,7 @@ $(document).on("click", ".answer1", function() {
 		//display an image associated with the answer
 		$("#image").html("<img src='" + images[i] + "'>");
 		//clear out the timer
-		questionCountdown == -1;
+		clearInterval(timeAlotted);
 		//wait three seconds and then run the game again
 		setTimeout(chooser, 3000);
 	}
@@ -245,7 +234,7 @@ $(document).on("click", ".answer1", function() {
 		//display an image associated with the answer
 		$("#image").html("<img src='" + images[i] + "'>");
 		//clear out the timer
-		questionCountdown == 0;
+		clearInterval(timeAlotted);
 		//wait three seconds and then run the game again
 		setTimeout(chooser, 3000);
 	}
@@ -269,7 +258,7 @@ $(document).on("click", ".answer2", function() {
 		//display an image associated with the answer
 		$("#image").html("<img src='" + images[i] + "'>");
 		//clear out the timer
-		questionCountdown == -1;
+		clearInterval(timeAlotted);
 		//wait three seconds and then run the game again
 		setTimeout(chooser, 3000);
 	}
@@ -284,7 +273,7 @@ $(document).on("click", ".answer2", function() {
 		//display an image associated with the answer
 		$("#image").html("<img src='" + images[i] + "'>");
 		//clear out the timer
-		questionCountdown == 0;
+		clearInterval(timeAlotted);
 		//wait three seconds and then run the game again
 		setTimeout(chooser, 3000);
 	}
@@ -308,7 +297,7 @@ $(document).on("click", ".answer3", function() {
 		//display an image associated with the answer
 		$("#image").html("<img src='" + images[i] + "'>");
 		//clear out the timer
-		questionCountdown == -1;
+		clearInterval(timeAlotted);
 		//wait three seconds and then run the game again
 		setTimeout(chooser, 3000);
 	}
@@ -323,7 +312,7 @@ $(document).on("click", ".answer3", function() {
 		//display an image associated with the answer
 		$("#image").html("<img src='" + images[i] + "'>");
 		//clear out the timer
-		questionCountdown == 0;
+		clearInterval(timeAlotted);
 		//wait three seconds and then run the game again
 		setTimeout(chooser, 3000);
 	}
